@@ -1,0 +1,37 @@
+export const students = {
+
+"12RT001":"Brennan Nolan Jnr",
+"12RT002":"Cameron Ezra Tsigasat Hoot",
+"12RT003":"Crystal Noreen Koi",
+"12RT004":"Carlson Segodi",
+"12RT005":"Esther Koka",
+"12RT006":"Gershon Raim",
+"12RT007":"Hyman Wemin",
+"12RT008":"Jordan Gilmore",
+"12RT009":"Noreen Geno",
+"12RT010":"Patricia Boma",
+"12RT011":"Patrina Pokeya",
+"12RT012":"Paulina Kongi",
+"12RT013":"Richard Nasai",
+"12RT014":"Salatiel Morong",
+"12RT015":"Simeon Poshka Ihembe",
+"12RT016":"Suzzenah Apa Vagi",
+"12RT017":"Marshlyn Tean",
+
+"12I001":"Alycia Chan Htet",
+"12I002":"Bernie Mengeap",
+"12I003":"Blanch Lowi",
+"12I004":"Cheyenne Koroka",
+"12I005":"Cindy Rovoa",
+"12I006":"Erica Wema",
+"12I007":"Grant Tirim Puyie",
+"12I008":"Janden Rosemary Wau",
+"12I009":"Jalal Maniet",
+"12I010":"Laisiana Martin",
+"12I011":"Levai Tuvui",
+"12I012":"Lyn Tean",
+"12I013":"Mackaila Kenni",
+"12I014":"Netty Nepo",
+"12I015":"Tensing Iggy Waiya"
+
+};

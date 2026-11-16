@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Formal Night Check-In</title>
+<style>
+body{
+font-family:Arial;
+text-align:center;
+padding:40px;
+}
+.success{
+color:green;
+}
+.error{
+color:red;
+}
+</style>
+</head>
+
+<body>
+
+<div id="result">
+<h1>Loading...</h1>
+</div>
+
+<script type="module">
+
+import { db } from './firebase-config.js';
+import { students } from './students.js';
+
+import {
+doc,
+getDoc,
+setDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const params = new URLSearchParams(window.location.search);
+
+const id = params.get("id");
+
+if(!students[id]){
+
+document.getElementById("result").innerHTML=
+"<h1 class='error'>Invalid QR Code</h1>";
+
+}else{
+
+const ref = doc(db,"attendance",id);
+
+const existing = await getDoc(ref);
+
+if(existing.exists()){
+
+document.getElementById("result").innerHTML=
+`<h1 class="error">Already Checked In</h1>
+<h2>${students[id]}</h2>`;
+
+}else{
+
+await setDoc(ref,{
+studentId:id,
+studentName:students[id],
+checkInTime:new Date().toISOString()
+});
+
+document.getElementById("result").innerHTML=
+`<h1 class="success">✅ Checked In</h1>
+<h2>${students[id]}</h2>`;
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
