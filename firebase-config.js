@@ -1,24 +1,19 @@
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-
-import { getFirestore } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
 const firebaseConfig = {
 
-apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyCNgjONe0vYFKzaBUgsJc814_Y6Z31wMFU",
 
-authDomain: "YOUR_PROJECT.firebaseapp.com",
+  authDomain: "formal-night-attendance.firebaseapp.com",
 
-projectId: "YOUR_PROJECT",
+  projectId: "formal-night-attendance",
 
-storageBucket: "YOUR_PROJECT.appspot.com",
+  storageBucket: "formal-night-attendance.firebasestorage.app",
 
-messagingSenderId: "YOUR_SENDER_ID",
+  messagingSenderId: "180472862286",
 
-appId: "YOUR_APP_ID"
+  appId: "1:180472862286:web:8cbf82381275e32388551f"
 
 };
+
 
 const app = initializeApp(firebaseConfig);
 
