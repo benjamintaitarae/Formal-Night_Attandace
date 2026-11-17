@@ -1,78 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Formal Night Check-In</title>
-<style>
-body{
-font-family:Arial;
-text-align:center;
-padding:40px;
-}
-.success{
-color:green;
-}
-.error{
-color:red;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Formal Night Check-In</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+  </style>
 </head>
 
 <body>
 
-<div id="result">
-<h1>Loading...</h1>
-</div>
+  <div id="result">
+    <h1>Loading...</h1>
+  </div>
 
-<script type="module">
+  <script type="module">
+    import { db } from './firebase-config.js';
+    import { students } from './students.js';
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-import { db } from './firebase-config.js';
-import { students } from './students.js';
+    async function checkIn() {
+      const resultDiv = document.getElementById("result");
 
-import {
-doc,
-getDoc,
-setDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
 
-const params = new URLSearchParams(window.location.search);
+        if (!id || !students[id]) {
+          resultDiv.innerHTML = "<h1 class='error'>Invalid QR Code</h1>";
+          return;
+        }
 
-const id = params.get("id");
+        const ref = doc(db, "attendance", id);
+        const existing = await getDoc(ref);
 
-if(!students[id]){
+        if (existing.exists()) {
+          resultDiv.innerHTML = `
+            <h1 class="error">Already Checked In</h1>
+            <h2>${students[id]}</h2>
+          `;
+        } else {
+          await setDoc(ref, {
+            studentId: id,
+            studentName: students[id],
+            checkInTime: new Date().toISOString()
+          });
 
-document.getElementById("result").innerHTML=
-"<h1 class='error'>Invalid QR Code</h1>";
+          resultDiv.innerHTML = `
+            <h1 class="success">✅ Checked In</h1>
+            <h2>${students[id]}</h2>
+          `;
+        }
+      } catch (error) {
+        console.error("Check-in error:", error);
+        resultDiv.innerHTML = `
+          <h1 class="error">System Error</h1>
+          <p>${error.message}</p>
+        `;
+      }
+    }
 
-}else{
-
-const ref = doc(db,"attendance",id);
-
-const existing = await getDoc(ref);
-
-if(existing.exists()){
-
-document.getElementById("result").innerHTML=
-`<h1 class="error">Already Checked In</h1>
-<h2>${students[id]}</h2>`;
-
-}else{
-
-await setDoc(ref,{
-studentId:id,
-studentName:students[id],
-checkInTime:new Date().toISOString()
-});
-
-document.getElementById("result").innerHTML=
-`<h1 class="success">✅ Checked In</h1>
-<h2>${students[id]}</h2>`;
-
-}
-
-}
-
-</script>
+    checkIn();
+  </script>
 
 </body>
 </html>
