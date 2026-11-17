@@ -1,99 +1,107 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Attendance Dashboard</title>
-
-<style>
-body{
-font-family:Arial;
-margin:20px;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-th,td{
-padding:10px;
-border:1px solid #ccc;
-}
-
-th{
-background:#1976d2;
-color:white;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Attendance Dashboard</title>
+  <style>
+    body {
+      background-color: #0a0a0a;
+      color: #f5e6c8;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 30px;
+    }
+    h1 {
+      color: #d4af37;
+      font-family: 'Georgia', serif;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+    #count {
+      display: inline-block;
+      background: #17140d;
+      border: 1px solid #d4af37;
+      color: #ffd700;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin: 15px 0 25px 0;
+      font-size: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #121212;
+      border: 1px solid #d4af37;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+    }
+    th, td {
+      padding: 14px;
+      border: 1px solid #2e2612;
+      text-align: left;
+    }
+    th {
+      background: linear-gradient(90deg, #b8860b, #d4af37);
+      color: #0a0a0a;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 13px;
+    }
+    tr:nth-child(even) {
+      background-color: #181818;
+    }
+    tr:hover {
+      background-color: #241e11;
+    }
+  </style>
 </head>
 
 <body>
 
-<h1>🎓 Formal Night Attendance Dashboard</h1>
+  <h1>🎓 Formal Night Attendance Dashboard</h1>
+  <h2 id="count">Present: 0</h2>
 
-<h2 id="count">Present: 0</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Check-In Time</th>
+      </tr>
+    </thead>
+    <tbody id="attendance"></tbody>
+  </table>
 
-<table>
+  <script type="module">
+    import { db } from './firebase-config.js';
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-<thead>
-<tr>
-<th>ID</th>
-<th>Name</th>
-<th>Check-In Time</th>
-</tr>
-</thead>
+    async function loadAttendance() {
+      const tbody = document.getElementById("attendance");
+      tbody.innerHTML = "";
 
-<tbody id="attendance"></tbody>
+      const attendance = await getDocs(collection(db, "attendance"));
+      let count = 0;
 
-</table>
+      attendance.forEach(doc => {
+        count++;
+        const data = doc.data();
 
-<script type="module">
+        tbody.innerHTML += `
+          <tr>
+            <td>${data.studentId}</td>
+            <td>${data.studentName}</td>
+            <td>${new Date(data.checkInTime).toLocaleString()}</td>
+          </tr>
+        `;
+      });
 
-import { db } from './firebase-config.js';
+      document.getElementById("count").textContent = `Present: ${count}`;
+    }
 
-import {
-collection,
-getDocs
-}
-from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-async function loadAttendance(){
-
-const tbody =
-document.getElementById("attendance");
-
-tbody.innerHTML="";
-
-const attendance =
-await getDocs(collection(db,"attendance"));
-
-let count = 0;
-
-attendance.forEach(doc=>{
-
-count++;
-
-const data = doc.data();
-
-tbody.innerHTML += `
-<tr>
-<td>${data.studentId}</td>
-<td>${data.studentName}</td>
-<td>${new Date(data.checkInTime).toLocaleString()}</td>
-</tr>
-`;
-
-});
-
-document.getElementById("count").textContent =
-`Present: ${count}`;
-
-}
-
-loadAttendance();
-
-setInterval(loadAttendance,5000);
-
-</script>
+    loadAttendance();
+    setInterval(loadAttendance, 5000);
+  </script>
 
 </body>
 </html>
